@@ -7,7 +7,7 @@ setup(
   author = 'Nimrod Zilberstein',
   author_email = 'nimz911@gmail.com',
   url = 'https://github.com/nimz911/Facebook_Data_MiningPY', # use the URL to the github repo
-  download_url = 'https://github.com/nimz911/Facebook_Data_MiningPY/archive/Facebook_Data_MiningPY_1.0.tar.gz', # I'll explain this in a second
+  download_url = 'https://github.com/nimz911/Facebook_Data_MiningPY/archive/1.0.tar.gz', # I'll explain this in a second
   keywords = ['facebook', 'data mining'], # arbitrary keywords
   classifiers = ['Programming Language :: Pyhton :: 2','Programming Language :: Pyhton :: 2.7'],
 )
