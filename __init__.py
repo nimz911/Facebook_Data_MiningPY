@@ -52,7 +52,7 @@ def GetMembers(AccessToken, FacebookID):
             author_id.append(members_name_data[i][j].get('id'))
             author_name.append(members_name_data[i][j].get('name'))
 
-    df2 = pd.DataFrame({'author_id':author_id, 'member':author_name})
+    df2 = pd.DataFrame({'author_ID':author_id, 'member':author_name})
     df2 = df2.set_index('author_id')
 
 
