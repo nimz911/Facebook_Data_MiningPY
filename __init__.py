@@ -63,6 +63,7 @@ def GetMembers(AccessToken, FacebookID):
     membersDF['Days_in_Group'] = membersDF['Days_in_Group'].round()
     membersDF = membersDF.drop('TimeDelta',1)
     membersDF = membersDF.sort_values('Days_in_Group', axis=0, ascending=False)
+	membersDF = membersDF.reset_index()
     end_time = datetime.today()
     print '\t'+'GetMembers run time: ' + str(end_time - start_time)[:-7]
     return membersDF
@@ -320,6 +321,7 @@ def FacebookData_read(AccessToken, FacebookID):
 	pool4 = ThreadPool(processes=1)
 	pool5 = ThreadPool(processes=1)
 	pool6 = ThreadPool(processes=1)
+	pool7 = ThreadPool(processes=1)
 
 	async_result1 = pool1.apply_async(GetPosts, (AccessToken, FacebookID))
 	async_result2 = pool2.apply_async(GetTimestamp, (AccessToken, FacebookID))
@@ -327,6 +329,7 @@ def FacebookData_read(AccessToken, FacebookID):
 	async_result4 = pool4.apply_async(GetFullPictureLink, (AccessToken, FacebookID))
 	async_result5 = pool5.apply_async(GetReactionsCounter, (AccessToken, FacebookID))
 	async_result6 = pool6.apply_async(GetCommentsCounter, (AccessToken, FacebookID))
+	async_result7 = pool7.apply_async(GetMembers, (AccessToken, FacebookID))
 
 	df1 = async_result1.get()
 	df2 = async_result2.get()
@@ -334,6 +337,7 @@ def FacebookData_read(AccessToken, FacebookID):
 	df4 = async_result4.get()
 	df5 = async_result5.get()
 	df6 = async_result6.get()
+	df7 = async_result7.get()
 
 	data = df1.join(df2)
 	data = data.join(df3)
@@ -346,7 +350,7 @@ def FacebookData_read(AccessToken, FacebookID):
 	print '\n'+'end time: ' + str(end_time)[:-7]
 	print 'total run time: ' + str(end_time - start_time)[:-7]
 
-	return data 
+	return data, df7
 
 def Posts_WordCount(AccessToken, FacebookID):
     from nltk import word_tokenize
