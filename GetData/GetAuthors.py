@@ -8,8 +8,7 @@ def GetAuthors(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
-	token = AccessToken
-	graph = facebook.GraphAPI(token, version='2.7')
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['from'])
 	posts_data.append(posts['data'])
 

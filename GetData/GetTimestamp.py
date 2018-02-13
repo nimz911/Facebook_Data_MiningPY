@@ -8,8 +8,7 @@ def GetTimestamp(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
-	token = AccessToken
-	graph = facebook.GraphAPI(token, version='2.7')
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['created_time'])
 	posts_data.append(posts['data'])
 
@@ -35,6 +34,10 @@ def GetTimestamp(AccessToken, FacebookID):
 	created_timeDF['time'] = created_timeDF['TimeStamp'].dt.time
 	created_timeDF['date'] = created_timeDF['TimeStamp'].dt.date
 	created_timeDF['WeekDay'] = created_timeDF['TimeStamp'].dt.weekday
+	weekdays = ['Monday','Tuesday','Wednesday','Thursday ','Friday','Saturday','Sunday']
+	for i in range(len(weekdays)):
+		created_timeDF['WeekDay'] = created_timeDF['WeekDay'].replace(i, weekdays[i])
+		
 	#created_timeDF = created_timeDF.drop('created_time',1)
 	end_time = datetime.today()
 	

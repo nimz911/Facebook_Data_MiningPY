@@ -12,8 +12,7 @@ def FacebookData_read(AccessToken, FacebookID):
     def FacebookPosts_read(AccessToken, FacebookID):
         start_time = datetime.today()
         posts_data = []
-        token = AccessToken
-        graph = facebook.GraphAPI(token, version='2.7')
+        graph = facebook.GraphAPI(AccessToken, version='2.7')
         posts = graph.get_connections(FacebookID,'feed', fields = ['message'])
         posts_data.append(posts['data'])
 
@@ -42,8 +41,7 @@ def FacebookData_read(AccessToken, FacebookID):
     def FacebookCreatedTime_read(AccessToken, FacebookID):
         start_time = datetime.today()
         posts_data = []
-        token = AccessToken
-        graph = facebook.GraphAPI(token, version='2.7')
+        graph = facebook.GraphAPI(AccessToken, version='2.7')
         posts = graph.get_connections(FacebookID,'feed', fields = ['created_time'])
         posts_data.append(posts['data'])
 
@@ -78,8 +76,7 @@ def FacebookData_read(AccessToken, FacebookID):
     def FacebookAuthors_read(AccessToken, FacebookID): 
         start_time = datetime.today()
         posts_data = []
-        token = AccessToken
-        graph = facebook.GraphAPI(token, version='2.7')
+        graph = facebook.GraphAPI(AccessToken, version='2.7')
         posts = graph.get_connections(FacebookID,'feed', fields = ['from'])
         posts_data.append(posts['data'])
 
@@ -114,8 +111,7 @@ def FacebookData_read(AccessToken, FacebookID):
     def FacebookFullPicture_read(AccessToken, FacebookID):
         start_time = datetime.today()
         posts_data = []
-        token = AccessToken
-        graph = facebook.GraphAPI(token, version='2.7')
+        graph = facebook.GraphAPI(AccessToken, version='2.7')
         posts = graph.get_connections(FacebookID,'feed', fields = ['full_picture'])
         posts_data.append(posts['data'])
 
@@ -144,6 +140,7 @@ def FacebookData_read(AccessToken, FacebookID):
     def FacebookReactionsCounter(AccessToken, FacebookID):
         start_time = datetime.today()
         posts_data = []
+		graph = facebook.GraphAPI(AccessToken, version='2.7')
         posts = graph.get_connections(FacebookID,'feed', fields = ['reactions.limit(0).summary(true)'])
         posts_data.append(posts['data'])
 
@@ -172,6 +169,7 @@ def FacebookData_read(AccessToken, FacebookID):
     def FacebookCommentsCounter(AccessToken, FacebookID):
         start_time = datetime.today()
         posts_data = []
+		graph = facebook.GraphAPI(AccessToken, version='2.7')
         posts = graph.get_connections(FacebookID,'feed', fields = ['comments.limit(0).summary(true)'])
         posts_data.append(posts['data'])
 

@@ -8,6 +8,7 @@ def GetCommentsCounter(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['comments.limit(0).summary(true)'])
 	posts_data.append(posts['data'])
 

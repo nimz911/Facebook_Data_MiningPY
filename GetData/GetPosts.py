@@ -7,8 +7,7 @@ def GetPosts(AccessToken, FacebookID):
 	from datetime import datetime, timedelta
 	start_time = datetime.today()
 	posts_data = []
-	token = AccessToken
-	graph = facebook.GraphAPI(token, version='2.7')
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['message'])
 	posts_data.append(posts['data'])
 
