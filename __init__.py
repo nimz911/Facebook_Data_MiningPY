@@ -8,8 +8,7 @@ def GetPosts(AccessToken, FacebookID):
 	from datetime import datetime, timedelta
 	start_time = datetime.today()
 	posts_data = []
-	token = AccessToken
-	graph = facebook.GraphAPI(token, version='2.7')
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['message'])
 	posts_data.append(posts['data'])
 
@@ -45,8 +44,7 @@ def GetTimestamp(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
-	token = AccessToken
-	graph = facebook.GraphAPI(token, version='2.7')
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['created_time'])
 	posts_data.append(posts['data'])
 
@@ -77,9 +75,7 @@ def GetTimestamp(AccessToken, FacebookID):
 	
 	print '\t'+'CreatedTime_read run time: ' + str(end_time - start_time)[:-7]
 	return created_timeDF
-	
-	
-	
+		
 def GetAuthors(AccessToken, FacebookID): 
 	import facebook
 	import requests
@@ -90,8 +86,7 @@ def GetAuthors(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
-	token = AccessToken
-	graph = facebook.GraphAPI(token, version='2.7')
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['from'])
 	posts_data.append(posts['data'])
 
@@ -133,8 +128,7 @@ def GetFullPictureLink(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
-	token = AccessToken
-	graph = facebook.GraphAPI(token, version='2.7')
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['full_picture'])
 	posts_data.append(posts['data'])
 
@@ -170,6 +164,7 @@ def GetReactionsCounter(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['reactions.limit(0).summary(true)'])
 	posts_data.append(posts['data'])
 
@@ -205,6 +200,7 @@ def GetCommentsCounter(AccessToken, FacebookID):
 
 	start_time = datetime.today()
 	posts_data = []
+	graph = facebook.GraphAPI(AccessToken, version='2.7')
 	posts = graph.get_connections(FacebookID,'feed', fields = ['comments.limit(0).summary(true)'])
 	posts_data.append(posts['data'])
 
@@ -293,8 +289,7 @@ def Posts_WordCount(AccessToken, FacebookID):
     
     start_time = datetime.today()
     posts_data = []
-    token = AccessToken
-    graph = facebook.GraphAPI(token, version='2.7')
+    graph = facebook.GraphAPI(AccessToken, version='2.7')
     posts = graph.get_connections(FacebookID,'feed', fields = ['message'])
     posts_data.append(posts['data'])
 
