@@ -42,8 +42,8 @@ def GetMembers(AccessToken, FacebookID):
             join_date.append(members_data[i][j].get('joined'))
 
 
-    df1 = pd.DataFrame({'author_id':author_id, 'join_date':join_date})
-    df1 = df1.set_index('author_id')
+    df1 = pd.DataFrame({'author_ID':author_id, 'join_date':join_date})
+    df1 = df1.set_index('author_ID')
 
     author_id = []
     author_name = []
@@ -53,7 +53,7 @@ def GetMembers(AccessToken, FacebookID):
             author_name.append(members_name_data[i][j].get('name'))
 
     df2 = pd.DataFrame({'author_ID':author_id, 'member':author_name})
-    df2 = df2.set_index('author_id')
+    df2 = df2.set_index('author_ID')
 
 
     membersDF = df1.join(df2)
@@ -331,26 +331,32 @@ def FacebookData_read(AccessToken, FacebookID):
 	async_result6 = pool6.apply_async(GetCommentsCounter, (AccessToken, FacebookID))
 	async_result7 = pool7.apply_async(GetMembers, (AccessToken, FacebookID))
 
-	df1 = async_result1.get()
-	df2 = async_result2.get()
-	df3 = async_result3.get()
-	df4 = async_result4.get()
-	df5 = async_result5.get()
-	df6 = async_result6.get()
+	PostsDF = async_result1.get()
+	TimestampDF = async_result2.get()
+	AuthorDF = async_result3.get()
+	FullPictureLinkDF = async_result4.get()
+	ReactionsCounterDF = async_result5.get()
+	CommentsCounterDF = async_result6.get()
 	df7 = async_result7.get()
 
-	data = df1.join(df2)
-	data = data.join(df3)
-	data = data.join(df4)
-	data = data.join(df5)
-	data = data.join(df6)
-
+	data = PostsDF.join(TimestampDF)
+	data = data.join(AuthorDF)
+	data = data.join(FullPictureLinkDF)
+	data = data.join(ReactionsCounterDF)
+	data = data.join(CommentsCounterDF)
+	
+	membersDF_sum = data.groupby(['author_ID','author_name']).sum().sort_values('comments_count', ascending=False)
+	membersDF_count = data.groupby(['author_ID','author_name']).count().sort_values('comments_count', ascending=False)['TimeStamp']
+	membersDF = membersDF_sum.join(membersDF_count).rename(columns={'TimeStamp': 'Post_Count'})
+	membersDF['reactions_AVG'] = membersDF['reactions_count'] / membersDF['Post_Count']
+	membersDF['comments_AVG'] = membersDF['comments_count'] / membersDF['Post_Count']
+	membersDF = membersDF.sort_values('comments_AVG', ascending=False)
 
 	end_time = datetime.today()
 	print '\n'+'end time: ' + str(end_time)[:-7]
 	print 'total run time: ' + str(end_time - start_time)[:-7]
 
-	return data, df7
+	return data, membersDF
 
 def Posts_WordCount(AccessToken, FacebookID):
     from nltk import word_tokenize
