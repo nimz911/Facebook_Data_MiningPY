@@ -52,19 +52,23 @@ def GetMembers(AccessToken, FacebookID):
             author_id.append(members_name_data[i][j].get('id'))
             author_name.append(members_name_data[i][j].get('name'))
 
-    df2 = pd.DataFrame({'author_ID':author_id, 'member':author_name})
-    df2 = df2.set_index('author_ID')
-
-
-    membersDF = df1.join(df2)
-    membersDF['join_date'] = pd.to_datetime(membersDF['join_date'],unit='s')
-    membersDF['TimeDelta'] = pd.datetime.now().date() - pd.to_datetime(membersDF['join_date'],unit='s')
-    membersDF['Days_in_Group'] = membersDF['TimeDelta'].dt.total_seconds()/(24 * 60 * 60)
-    membersDF['Days_in_Group'] = membersDF['Days_in_Group'].round()
-    membersDF = membersDF.drop('TimeDelta',1)
-    membersDF = membersDF.sort_values('Days_in_Group', axis=0, ascending=False)
+    
+	
+	df2 = pd.DataFrame({'author_ID':author_id, 'member':author_name})
+	df2 = df2.set_index('author_ID')
+	membersDF = df1.join(df2)
+	membersDF['join_date'] = pd.to_datetime(membersDF['join_date'],unit='s')
+	membersDF['TimeDelta'] = pd.datetime.now().date() - pd.to_datetime(membersDF['join_date'],unit='s')
+	membersDF['Days_in_Group'] = membersDF['TimeDelta'].dt.total_seconds()/(24 * 60 * 60)
+	membersDF['Days_in_Group'] = membersDF['Days_in_Group'].round()
+	membersDF = membersDF.drop('TimeDelta',1)
+	membersDF = membersDF.sort_values('Days_in_Group', axis=0, ascending=False)
 	membersDF = membersDF.reset_index()
+	membersDF = membersDF.loc[membersDF['member'] != 'hidden']
+	membersDF = membersDF.drop(['member'],1)
+	
     end_time = datetime.today()
+	
     print '\t'+'GetMembers run time: ' + str(end_time - start_time)[:-7]
     return membersDF
 
@@ -337,7 +341,7 @@ def FacebookData_read(AccessToken, FacebookID):
 	FullPictureLinkDF = async_result4.get()
 	ReactionsCounterDF = async_result5.get()
 	CommentsCounterDF = async_result6.get()
-	df7 = async_result7.get()
+	members = async_result7.get()
 
 	data = PostsDF.join(TimestampDF)
 	data = data.join(AuthorDF)
@@ -348,9 +352,16 @@ def FacebookData_read(AccessToken, FacebookID):
 	membersDF_sum = data.groupby(['author_ID','author_name']).sum().sort_values('comments_count', ascending=False)
 	membersDF_count = data.groupby(['author_ID','author_name']).count().sort_values('comments_count', ascending=False)['TimeStamp']
 	membersDF = membersDF_sum.join(membersDF_count).rename(columns={'TimeStamp': 'Post_Count'})
+	
 	membersDF['reactions_AVG'] = membersDF['reactions_count'] / membersDF['Post_Count']
 	membersDF['comments_AVG'] = membersDF['comments_count'] / membersDF['Post_Count']
 	membersDF = membersDF.sort_values('comments_AVG', ascending=False)
+	#membersDF = membersDF.loc[membersDF['author_name'] != 'hidden']
+	membersDF = membersDF.reset_index() 
+	
+	membersDF = membersDF.join(members, lsuffix='_L', rsuffix="_R")
+	membersDF = membersDF.drop(['author_ID_R'],1)
+	membersDF = membersDF.rename(columns={'author_ID_L': 'memberID'})
 
 	end_time = datetime.today()
 	print '\n'+'end time: ' + str(end_time)[:-7]
