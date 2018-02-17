@@ -64,7 +64,6 @@ def GetMembers(AccessToken, FacebookID):
 	membersDF = membersDF.drop('TimeDelta',1)
 	membersDF = membersDF.sort_values('Days_in_Group', axis=0, ascending=False)
 	membersDF = membersDF.reset_index()
-	membersDF = membersDF.loc[membersDF['member'] != 'hidden']
 	membersDF = membersDF.drop(['member'],1)
 	
     end_time = datetime.today()
@@ -356,7 +355,6 @@ def FacebookData_read(AccessToken, FacebookID):
 	membersDF['reactions_AVG'] = membersDF['reactions_count'] / membersDF['Post_Count']
 	membersDF['comments_AVG'] = membersDF['comments_count'] / membersDF['Post_Count']
 	membersDF = membersDF.sort_values('comments_AVG', ascending=False)
-	#membersDF = membersDF.loc[membersDF['author_name'] != 'hidden']
 	membersDF = membersDF.reset_index() 
 	
 	membersDF = membersDF.join(members, lsuffix='_L', rsuffix="_R")
