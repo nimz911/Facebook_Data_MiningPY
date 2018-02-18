@@ -365,7 +365,7 @@ def FacebookData_read(AccessToken, FacebookID):
 	print '\n'+'end time: ' + str(end_time)[:-7]
 	print 'total run time: ' + str(end_time - start_time)[:-7]
 
-	return data, membersDF
+	return data, membersDF, members
 
 def Posts_WordCount(AccessToken, FacebookID):
     from nltk import word_tokenize
